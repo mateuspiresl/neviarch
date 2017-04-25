@@ -1,14 +1,22 @@
 package com.neviarch;
 
+import com.neviarch.instruction.InstructionNotFoundException;
+
 public enum Register
 {
-	AX((byte) 0x0), BX((byte) 0x1), CX((byte) 0x2), DX((byte) 0x3),
-	EX((byte) 0x4), FX((byte) 0x5), GX((byte) 0x6), HX((byte) 0x7);
+	AX, BX, CX, DX, EX, FX, GX, HX,
+	PC, IR, MAR, MBR, ACC;
 	
-	public final byte code;
+	public static final boolean LEFT = false;
+	public static final boolean RIGHT = true;
 	
-	private Register(byte code) {
-		this.code = code;
+	/**
+	 * Returns the register code shifted to the left or right register place.
+	 * @param place the place to shift (should be LEFT ot RIGHT).
+	 * @return the shifted value.
+	 */
+	public int shifted(boolean place) {
+		return this.ordinal() << (place == LEFT ? 22 : 16);
 	}
 	
 	/**
@@ -17,21 +25,29 @@ public enum Register
 	 * @return the register.
 	 * @throws InstructionNotFoundException if the code does not represent any register.
 	 */
-	public static Register interpret(byte code) throws RegisterNotFoundException
+	public static Register fromCode(int code) throws RegisterNotFoundException
 	{
 		switch (code)
 		{
-		case 0x0: return AX;
-		case 0x1: return BX;
-		case 0x2: return CX;
-		case 0x3: return DX;
-		case 0x4: return EX;
-		case 0x5: return FX;
-		case 0x6: return GX;
-		case 0x7: return HX;
+		case 0x00: return AX;
+		case 0x01: return BX;
+		case 0x02: return CX;
+		case 0x03: return DX;
+		case 0x04: return EX;
+		case 0x05: return FX;
+		case 0x06: return GX;
+		case 0x07: return HX;
 		}
 		
 		throw new RegisterNotFoundException("The code '" + code + "' does not represent any instruction.");
+	}
+	
+	public static Register interpret(int instruction, boolean place) throws RegisterNotFoundException
+	{
+		if (place == LEFT)
+			return fromCode(instruction >> 22 & 0x3F);
+		else
+			return fromCode(instruction >> 16 & 0x3F);
 	}
 	
 	/**
