@@ -25,7 +25,7 @@ public class MemoryTest
 		Registers registers = new Registers();
 		Memory memory = new Memory(registers);
 		
-		memory.allocateProgram(new byte[] { 0, 0, 0xF, 0 });
+		memory.storeProgram(new byte[] { 0, 0, 0xF, 0 });
 		assertEquals(1, memory.getProgramEnd());
 		
 		registers.set(Register.MAR, 0);
@@ -35,7 +35,7 @@ public class MemoryTest
 		memory.freeProgram();
 		assertEquals(0, memory.getProgramEnd());
 		
-		memory.allocateProgram(new byte[] { 0, 0, 0xF, 0, 0xF, 0, 0, 1 });
+		memory.storeProgram(new byte[] { 0, 0, 0xF, 0, 0xF, 0, 0, 1 });
 		assertEquals(2, memory.getProgramEnd());
 		
 		registers.set(Register.MAR, 0);
@@ -52,7 +52,7 @@ public class MemoryTest
 	{
 		Registers registers = new Registers();
 		Memory memory = new Memory(registers);
-		memory.allocateProgram(new byte[] { 0, 0, 0, 0 });
+		memory.storeProgram(new byte[] { 0, 0, 0, 0 });
 		
 		registers.set(Register.MAR, 0);
 		registers.set(Register.MBR, 0xA);

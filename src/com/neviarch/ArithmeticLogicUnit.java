@@ -4,7 +4,7 @@ import com.neviarch.instruction.Instruction;
 
 public class ArithmeticLogicUnit
 {
-	private Registers registers;
+	private final Registers registers;
 	
 	/**
 	 * ALU constructor.
@@ -17,6 +17,12 @@ public class ArithmeticLogicUnit
 	
 	/**
 	 * Performs an arithmetic calculation.
+	 * @param register the register with will do the calculation.
+	 * @throws NotSupportedActionExpcetion if the instruction set is not supported.
+	 */
+	/**
+	 * Performs an arithmetic calculation.
+	 * @param action the instruction that represents the action.
 	 * @param register the register with will do the calculation.
 	 * @throws NotSupportedActionExpcetion if the instruction set is not supported.
 	 */

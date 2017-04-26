@@ -1,5 +1,8 @@
 package com.neviarch;
 
+/**
+ * Thrown when a register parsing fails.
+ */
 public class RegisterNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 1279231062204043214L;
 	

@@ -24,7 +24,7 @@ public class ControlUnitTest
 		ControlUnit controlUnit = new ControlUnit(registers, memory, new ArithmeticLogicUnit(registers));
 		
 		String code = "SET AX 0xA SET BX 0x14 ADD AX BX STORE AX 0x0 LOAD CX 0x0 SUB BX CX";
-		controlUnit.allocateProgram(compile(code));
+		controlUnit.setProgram(compile(code));
 		controlUnit.start();
 		
 		Assert.assertEquals(30, registers.get(Register.AX));
@@ -44,7 +44,7 @@ public class ControlUnitTest
 		ControlUnit controlUnit = new ControlUnit(registers, memory, new ArithmeticLogicUnit(registers));
 		
 		String code = "set ax 0x1 set bx 0x2 set cx 0x0 set dx 0x6 add cx ax add cx bx jumpgreq dx cx 0x4 store cx 0x0";
-		controlUnit.allocateProgram(compile(code));
+		controlUnit.setProgram(compile(code));
 		controlUnit.start();
 		
 		Assert.assertEquals(1, registers.get(Register.AX));

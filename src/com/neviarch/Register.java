@@ -42,6 +42,13 @@ public enum Register
 		throw new RegisterNotFoundException("The code '" + code + "' does not represent any instruction.");
 	}
 	
+	/**
+	 * Extracts the registers from an instruction.
+	 * @param instruction the instruction as integer.
+	 * @param place false for left and true for right register.
+	 * @return the register.
+	 * @throws RegisterNotFoundException if the value found does not represents a register.
+	 */
 	public static Register interpret(int instruction, boolean place) throws RegisterNotFoundException
 	{
 		if (place == LEFT)

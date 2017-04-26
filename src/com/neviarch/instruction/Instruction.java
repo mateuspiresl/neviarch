@@ -2,30 +2,63 @@ package com.neviarch.instruction;
 
 public enum Instruction
 {
+	/**
+	 * Retrieves a value from the memory at the address specified in the MAR
+	 * to a register.
+	 */
 	LOAD(InstructionParameters.REGISTER_ADDRESS),
+	/**
+	 * Stores a value in a register to the memory at the address specified
+	 * in the MAR.
+	 */
 	STORE(InstructionParameters.REGISTER_ADDRESS),
+	/**
+	 * Set a given value to a register.
+	 */
 	SET(InstructionParameters.REGISTER_ADDRESS),
 	
-	// Stores the result in R1
+	/**
+	 * Adds the values from two registers and stores in the first.
+	 */
 	ADD(InstructionParameters.DUAL_REGISTER),
+	/**
+	 * Subtracts the values from two registers and stores in the first.
+	 */
 	SUB(InstructionParameters.DUAL_REGISTER),
+	/**
+	 * Multiplies the values from two registers and stores in the first.
+	 */
 	MULT(InstructionParameters.DUAL_REGISTER),
+	/**
+	 * Divides the values from one registers to another, storing in the first.
+	 */
 	DIV(InstructionParameters.DUAL_REGISTER),
 	
-	// Jumps unconditionally
+	/**
+	 * Jumps unconditionaly to the address.
+	 */
 	JUMP(InstructionParameters.ADDRESS),
-	// Jumps if R1 == R2
+	/**
+	 * Jumps to the address if the value of the first register is equal to
+	 * the value of the second.
+	 */
 	JUMPEQ(InstructionParameters.DUAL_REGISTER_ADDRESS),
-	// Jumps if R1 > R2 (R2 <= R1)
+	/**
+	 * Jumps to the address if the value of the first register is greater than
+	 * or equal to the value of the second.
+	 */
 	JUMPGR(InstructionParameters.DUAL_REGISTER_ADDRESS),
-	// Jumps if R1 >= R2 (R2 < R1)
+	/**
+	 * Jumps to the address if the value of the first register is greater than
+	 * the value of the second.
+	 */
 	JUMPGREQ(InstructionParameters.DUAL_REGISTER_ADDRESS);
 	
 	public final InstructionParameters parameters;
 	
 	/**
 	 * Instruction constructor.
-	 * @param params number of parameters.
+	 * @param parameters number of parameters.
 	 */
 	private Instruction(InstructionParameters parameters) {
 		this.parameters = parameters;
@@ -66,6 +99,11 @@ public enum Instruction
 				+ "' does not represent an instruction.");
 	}
 	
+	/**
+	 * Extracts the instruction from the instruction data.
+	 * @param instruction the instruction as integer.
+	 * @return the instruction type.
+	 */
 	public static Instruction interpret(int instruction) {
 		return fromCode(instruction >> 28 & 0xF);
 	}

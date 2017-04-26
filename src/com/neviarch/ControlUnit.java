@@ -5,12 +5,18 @@ import com.neviarch.instruction.InstructionData;
 
 public class ControlUnit
 {
-	private Registers registers;
-	private Memory memory;
-	private ArithmeticLogicUnit alu;
+	private final Registers registers;
+	private final Memory memory;
+	private final ArithmeticLogicUnit alu;
 	
 	private InstructionData instruction;
 	
+	/**
+	 * ControlUnit constructor.
+	 * @param registers the registers.
+	 * @param memory the memory.
+	 * @param alu the aithmetic logic unit.
+	 */
 	public ControlUnit(Registers registers, Memory memory, ArithmeticLogicUnit alu)
 	{
 		this.registers = registers;
@@ -18,12 +24,19 @@ public class ControlUnit
 		this.alu = alu;
 	}
 	
-	public void allocateProgram(byte[] program)
+	/**
+	 * Sets the program and stores in memory.
+	 * @param program the program's bytes.
+	 */
+	public void setProgram(byte[] program)
 	{
-		this.memory.allocateProgram(program);
+		this.memory.storeProgram(program);
 		this.registers.set(Register.PC, 0);
 	}
 	
+	/**
+	 * Runs the program set.
+	 */
 	public void start()
 	{
 		while (fetchAndDecode())
@@ -52,6 +65,10 @@ public class ControlUnit
 		}
 	}
 	
+	/**
+	 * Fetchs and decodes the instruction at the address specified by PC.
+	 * @return true if there is an instruction to be executed; false, otherwise.
+	 */
 	private boolean fetchAndDecode()
 	{
 		if (this.registers.get(Register.PC) >= this.memory.getProgramEnd()) return false;
@@ -68,6 +85,9 @@ public class ControlUnit
 		return true;
 	}
 	
+	/**
+	 * Executes the instruction at IR.
+	 */
 	private void execute()
 	{
 		Register left = this.instruction.getLeftRegister();

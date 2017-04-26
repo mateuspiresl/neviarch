@@ -17,6 +17,10 @@ public class Compiler
 	private ByteBuffer buffer;
 	private int linesCompiledCount = 0;
 	
+	/**
+	 * Compiler constructor.
+	 * @param in the stream with the code.
+	 */
 	public Compiler(InputStream in)
 	{
 		this.in = new Scanner(in);
@@ -68,6 +72,10 @@ public class Compiler
 		return this;
 	}
 	
+	/**
+	 * Returns the number of lines compiled.
+	 * @return the number of lines compiled.
+	 */
 	public int getLinesCompiledCount() {
 		return this.linesCompiledCount;
 	}
@@ -105,6 +113,10 @@ public class Compiler
 		return this.buffer.getBytes();
 	}
 	
+	
+	/**
+	 * Provides store and access methods to a byte buffer.
+	 */
 	private class ByteBuffer
 	{
 		private static final int BLOCK_SIZE = 128;
@@ -113,6 +125,10 @@ public class Compiler
 		private byte[] data = new byte[BLOCK_SIZE];
 		private int size = 0;
 		
+		/**
+		 * Add a byte.
+		 * @param data the byte to add.
+		 */
 		public void add(byte data)
 		{
 			if (this.size == BLOCK_SIZE)
@@ -124,6 +140,11 @@ public class Compiler
 			this.data[size++] = data;
 		}
 		
+		/**
+		 * Returns first block of bytes.
+		 * Maximum of 128 byte array.
+		 * @return the block as byte array.
+		 */
 		public byte[] getPiece()
 		{
 			if (this.buffer.isEmpty())
@@ -136,10 +157,18 @@ public class Compiler
 			else return this.buffer.pollFirst();
 		}
 		
+		/**
+		 * Checks if the buffer is empty.
+		 * @return true if the buffer is empty.
+		 */
 		public boolean isEmpty() {
 			return this.buffer.isEmpty() && this.size == 0;
 		}
 		
+		/**
+		 * Returns the entire buffer as a byte array.
+		 * @return the buffer as a byte array.
+		 */
 		public byte[] getBytes()
 		{
 			byte[] data = new byte[this.buffer.size() * BLOCK_SIZE + this.size];

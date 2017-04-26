@@ -8,19 +8,51 @@ public class Memory
 	private final int[] memory = new int[0xFFFF];
 	private int programEnd = 0;
 	
+	/**
+	 * Memory constructor.
+	 * Needs access to the registers.
+	 * @param registers the registers.
+	 */
 	public Memory(Registers registers) {
 		this.registers = registers;
 	}
 	
+	/**
+	 * Returns the memory index for the program end.
+	 * @return the memory index for the program end.
+	 */
 	public int getProgramEnd() {
 		return this.programEnd;
 	}
 	
+	/**
+	 * Stores the value in MBR in the memory of address specified by MAR. 
+	 */
 	public void store() {
 		this.memory[this.programEnd + this.registers.get(Register.MAR)] = this.registers.get(Register.MBR);
 	}
 	
-	public void allocateProgram(byte[] program)
+	/**
+	 * Fetches the value in memory of address specified by MAR.
+	 * Used to fetch the real memory address.
+	 */
+	public void fetchProgram() {
+		this.registers.set(Register.MBR, this.memory[this.registers.get(Register.MAR)]);
+	}
+	
+	/**
+	 * Fetches the value in memory of address specified by MAR, not considering the program instructions space.
+	 * Used to fetch the memory of the program's variables.
+	 */
+	public void fetch() {
+		this.registers.set(Register.MBR, this.memory[this.programEnd + this.registers.get(Register.MAR)]);
+	}
+	
+	/**
+	 * Stores an entire program in the memory.
+	 * @param program the program's bytes.
+	 */
+	public void storeProgram(byte[] program)
 	{
 		freeProgram();
 		
@@ -33,20 +65,18 @@ public class Memory
 		}
 	}
 	
+	/**
+	 * Frees the program memory.
+	 */
 	public void freeProgram() {
 		this.programEnd = 0;
 	}
 	
-	public void fetchProgram()
-	{
-		if (this.registers.get(Register.MAR) < this.programEnd)
-			this.registers.set(Register.MBR, this.memory[this.registers.get(Register.MAR)]);
-	}
-	
-	public void fetch() {
-		this.registers.set(Register.MBR, this.memory[this.programEnd + this.registers.get(Register.MAR)]);
-	}
-	
+	/**
+	 * DEBUG
+	 * Returns the real memory.
+	 * @return the integer array of the memory.
+	 */
 	public int[] getMemory() {
 		return this.memory;
 	}
