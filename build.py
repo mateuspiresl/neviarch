@@ -5,7 +5,7 @@ try:
 except:
 	pass
 
-call(["javac", "-d", "bin", "src/*.java", "src/com/neviarch/*.java", "src/com/neviarch/instruction/*.java", "src/com/neviarch/util/*.java"])
+call(["javac", "-d", "bin/", "@sources.txt"])
 
-# javac -d bin src/*.java src/com/neviarch/*.java src/com/neviarch/instruction/*.java src/com/neviarch/util/*.java
+# javac -d bin/ @sources.txt
 # java -cp bin Program
