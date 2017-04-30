@@ -5,9 +5,12 @@ import com.neviarch.instruction.InstructionData;
 
 public class ControlUnit
 {
+	public static boolean LOG = false;
+	
 	private final Registers registers;
 	private final Memory memory;
 	private final ArithmeticLogicUnit alu;
+	private final IO io;
 	
 	private InstructionData instruction;
 	
@@ -17,11 +20,12 @@ public class ControlUnit
 	 * @param memory the memory.
 	 * @param alu the aithmetic logic unit.
 	 */
-	public ControlUnit(Registers registers, Memory memory, ArithmeticLogicUnit alu)
+	public ControlUnit(Registers registers, Memory memory, ArithmeticLogicUnit alu, IO io)
 	{
 		this.registers = registers;
 		this.memory = memory;
 		this.alu = alu;
+		this.io = io;
 	}
 	
 	/**
@@ -41,27 +45,34 @@ public class ControlUnit
 	{
 		while (fetchAndDecode())
 		{
-			System.out.println("Fetching and decoding 0x" + Integer.toHexString(this.registers.get(Register.IR)));
-			System.out.println("Instruction " + this.instruction.getInstruction() + " "
-					+ (this.instruction.getLeftRegister() != null ? this.instruction.getLeftRegister() + " " : "")
-					+ (this.instruction.getRightRegister() != null ? this.instruction.getRightRegister() + " " : "")
-					+ (this.instruction.getAddress() != null ? "0x" + Integer.toHexString(this.instruction.getAddress()).toUpperCase() : ""));
+			if (LOG)
+			{
+				System.out.println("Fetching and decoding 0x" + Integer.toHexString(this.registers.get(Register.IR)));
+				System.out.println("Instruction " + this.instruction.getInstruction() + " "
+						+ (this.instruction.getLeftRegister() != null ? this.instruction.getLeftRegister() + " " : "")
+						+ (this.instruction.getRightRegister() != null ? this.instruction.getRightRegister() + " " : "")
+						+ (this.instruction.getAddress() != null ? "0x" + Integer.toHexString(this.instruction.getAddress()).toUpperCase() : ""));
+			}
+			
 			execute();
 			
-			System.out.print("REG [ ");
-			for (int i = 0; i < 8; i++)
-				System.out.print(this.registers.get(Register.fromCode(i)) + " ");
-			System.out.println("]");
-			
-			System.out.print("MEM [ ");
-			for (int i = 0; i < 8; i++) {
-				this.registers.set(Register.MAR, i);
-				this.memory.fetch();
-				System.out.print(this.registers.get(Register.MBR) + " ");
+			if (LOG)
+			{
+				System.out.print("REG [ ");
+				for (int i = 0; i < 8; i++)
+					System.out.print(this.registers.get(Register.fromCode(i)) + " ");
+				System.out.println("]");
+				
+				System.out.print("MEM [ ");
+				for (int i = 0; i < 8; i++) {
+					this.registers.set(Register.MAR, i);
+					this.memory.fetch();
+					System.out.print(this.registers.get(Register.MBR) + " ");
+				}
+				System.out.println("]");
+				
+				System.out.println();
 			}
-			System.out.println("]");
-			
-			System.out.println();
 		}
 	}
 	
@@ -151,6 +162,26 @@ public class ControlUnit
 			
 			if (this.registers.get(Register.ACC) >= 0)
 				this.registers.set(Register.PC, Register.MAR);
+			break;
+			
+		case IN:
+			this.registers.set(left, this.io.read());
+			break;
+			
+		case OUT:
+			this.io.write(this.registers.get(left));
+			break;
+		
+		case LOADREG:
+			this.registers.set(Register.MAR, this.registers.get(right));
+			this.memory.fetch();
+			this.registers.set(left, Register.MBR);
+			break;
+			
+		case STOREREG:
+			this.registers.set(Register.MAR, this.registers.get(right));
+			this.registers.set(Register.MBR, left);
+			this.memory.store();
 			break;
 		}
 	}

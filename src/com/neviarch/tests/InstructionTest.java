@@ -21,6 +21,10 @@ public class InstructionTest
 		testInstruction(Instruction.JUMPEQ,		"JUMPEQ",	0x8);
 		testInstruction(Instruction.JUMPGR,		"JUMPGR",	0x9);
 		testInstruction(Instruction.JUMPGREQ,	"JUMPGREQ",	0xA);
+		testInstruction(Instruction.IN,			"IN",		0xB);
+		testInstruction(Instruction.OUT,		"OUT",		0xC);
+		testInstruction(Instruction.LOADREG,	"LOADREG",	0xD);
+		testInstruction(Instruction.STOREREG,	"STOREREG",	0xE);
 	}
 	
 	private void testInstruction(Instruction instruction, String name, int code)

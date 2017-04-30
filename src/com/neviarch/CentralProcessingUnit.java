@@ -15,7 +15,7 @@ public class CentralProcessingUnit
 		this.registers = new Registers();
 		this.memory = new Memory(this.registers);
 		this.arithmeticLogicUnit = new ArithmeticLogicUnit(this.registers);
-		this.controlUnit = new ControlUnit(this.registers, this.memory, this.arithmeticLogicUnit);
+		this.controlUnit = new ControlUnit(this.registers, this.memory, this.arithmeticLogicUnit, new IO(System.in, System.out));
 	}
 	
 	/**

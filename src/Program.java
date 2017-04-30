@@ -12,25 +12,28 @@ import java.util.Scanner;
 
 import com.neviarch.CentralProcessingUnit;
 import com.neviarch.Compiler;
+import com.neviarch.ControlUnit;
+import com.neviarch.Memory;
+import com.neviarch.Register;
+import com.neviarch.Registers;
 
 public class Program
 {
-	public static final String INPUT_NAME = "runtime.nevl";
-	public static final String OUTPUT_NAME = "runtime.nev";
+	public static final String INPUT_NAME = "C:/Mateus/runtime.nevl";
+	public static final String OUTPUT_NAME = "C:/Mateus/runtime.nev";
+	public static final String ERROR_MESSAGE = "Usage: compile file.nevl [file.nev] OR execute file.nev";
 	
 	public static void main(String[] args)
 	{
-		for (String arg : args) System.out.println(arg);
-		
 		if (args.length == 0)
 		{
-			if (!readCode()) return;
-			if (!compile(INPUT_NAME, OUTPUT_NAME)) return;
+			if (!readCode())
+				System.out.println(ERROR_MESSAGE);
 			
-			args = new String[] { "execute", OUTPUT_NAME };
+			else if (compile(INPUT_NAME, OUTPUT_NAME))
+				execute(OUTPUT_NAME);
 		}
-		
-		if (args[0].equals("compile"))
+		else if (args[0].equals("compile"))
 		{
 			if (args.length == 2)
 				compile(args[1]);
@@ -38,15 +41,25 @@ public class Program
 			else if (args.length == 3)
 				compile(args[1], args[2]);
 			
-			return;
+			else if (readCode())
+				compile(INPUT_NAME, OUTPUT_NAME);
+			
+			else System.out.println(ERROR_MESSAGE);
 		}
 		else if (args[0].equals("execute"))
 		{
-			execute(args[1]);
-			return;
+			if (args.length == 2)
+				execute(args[1]);
+			
+			else if (args.length == 3 && args[2].equals("--log"))
+			{
+				ControlUnit.LOG = true;
+				execute(args[1]);
+			}
+			
+			else System.out.println(ERROR_MESSAGE);
 		}
-		
-		System.out.println("Usage: compile file.nevl [file.nev] OR execute file.nev");
+		else System.out.println(ERROR_MESSAGE);
 	}
 	
 	public static boolean readCode()
@@ -69,11 +82,12 @@ public class Program
 		
 		File input = new File(INPUT_NAME);
 		
-		try {
+		if (!input.exists()) try {
 			input.createNewFile();
 		}
 		catch (IOException e) {
 			System.out.println("Could not create runtime file " + INPUT_NAME + ".");
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -88,23 +102,53 @@ public class Program
 		return true;
 	}
 	
-	public static boolean compile(String codeName, String compiledName)
+	public static boolean compile(String codeFileName, String compiledFileName)
 	{
 		Compiler compiler = null;
 		
 		try {
-			InputStream inStream = new FileInputStream(codeName);
-			OutputStream outStream = new FileOutputStream(compiledName);
+			try (InputStream inStream = new FileInputStream(codeFileName))
+			{
+				compiler = new Compiler(inStream);
+				
+				System.out.println("Starting compilation of " + codeFileName + ".");
+				compiler.compile();
+			}
+			catch (FileNotFoundException fnfe) {
+				System.out.println("The file " + codeFileName + " does not exist.");
+				return false;
+			}
 			
-			compiler = new Compiler(inStream);
-			compiler.compile().writeTo(outStream);
-			return true;
+			System.out.println("Compiled " + compiler.getLinesCompiledCount() + " lines of code.");
+			
+			File outFile = new File(compiledFileName);
+			if (outFile.exists() && !outFile.delete()) System.out.println("Error when trying to delete file " + outFile + ".");
+			
+			if (!outFile.createNewFile())
+			{
+				System.out.println("Error when trying to create file " + outFile + ".");
+				return false;
+			}
+			
+			byte[] program = compiler.getBytes();
+			System.out.println("Program size: " + program.length);
+			
+			try (OutputStream outStream = new FileOutputStream(outFile, false)) {
+				outStream.write(program);
+			}
+			
+			if (outFile.exists())
+			{
+				System.out.println("Writing executable file " + compiledFileName + " done.");
+				return true;
+			}
+			else {
+				System.out.println("Unknown error when creating executable file " + compiledFileName + ".");
+			}
 		}
-		catch (FileNotFoundException fnfe) {
-			System.out.println("The file " + codeName + " does not exist.");
-		}
-		catch (IOException fnfe) {
-			System.out.println("Could not write output file " + compiledName + ".");
+		catch (IOException ioe) {
+			System.out.println("Could not write output file " + compiledFileName + ".");
+			System.out.println("Error description: " + ioe.getMessage());
 		}
 		catch (Exception e) {
 			System.out.println("Compilation error at instruction " + compiler.getLinesCompiledCount() + ".");
@@ -130,6 +174,28 @@ public class Program
 			return;
 		}
 		
-		new CentralProcessingUnit().run(program);
+		System.out.println("Executing " + fileName + "...\n");
+		CentralProcessingUnit cpu = new CentralProcessingUnit().run(program);
+		
+		if (!ControlUnit.LOG)
+		{
+			Registers registers = cpu.getRegisters();
+			Memory memory = cpu.getMemory();
+			
+			System.out.print("REG [ ");
+			for (int i = 0; i < 8; i++)
+				System.out.print(registers.get(Register.fromCode(i)) + " ");
+			System.out.println("]");
+			
+			System.out.print("MEM [ ");
+			for (int i = 0; i < 8; i++) {
+				registers.set(Register.MAR, i);
+				memory.fetch();
+				System.out.print(registers.get(Register.MBR) + " ");
+			}
+			System.out.println("]");
+			
+			System.out.println();
+		}
 	}
 }

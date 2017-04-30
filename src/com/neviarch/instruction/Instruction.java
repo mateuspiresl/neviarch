@@ -52,7 +52,27 @@ public enum Instruction
 	 * Jumps to the address if the value of the first register is greater than
 	 * the value of the second.
 	 */
-	JUMPGREQ(InstructionParameters.DUAL_REGISTER_ADDRESS);
+	JUMPGREQ(InstructionParameters.DUAL_REGISTER_ADDRESS),
+	
+	/**
+	 * Prompts an integer from user and stores int the first register.
+	 */
+	IN(InstructionParameters.REGISTER),
+	/**
+	 * Ouputs an integer int the first register.
+	 */
+	OUT(InstructionParameters.REGISTER),
+	
+	/**
+	 * Read from memory at address specified in the second register
+	 * and store in the first register.
+	 */
+	LOADREG(InstructionParameters.DUAL_REGISTER),
+	/**
+	 * Store the value of the first register in memory at address
+	 * specified in the second register.
+	 */
+	STOREREG(InstructionParameters.DUAL_REGISTER);
 	
 	public final InstructionParameters parameters;
 	
@@ -93,6 +113,10 @@ public enum Instruction
 		case 0x8: return JUMPEQ;
 		case 0x9: return JUMPGR;
 		case 0xA: return JUMPGREQ;
+		case 0xB: return IN;
+		case 0xC: return OUT;
+		case 0xD: return LOADREG;
+		case 0xE: return STOREREG;
 		}
 		
 		throw new InstructionNotFoundException("The code '" + Integer.toHexString(code)
@@ -129,6 +153,10 @@ public enum Instruction
 		case "jumpeq":	 return JUMPEQ;
 		case "jumpgr":	 return JUMPGR;
 		case "jumpgreq": return JUMPGREQ;
+		case "in":		 return IN;
+		case "out":		 return OUT;
+		case "loadreg":	 return LOADREG;
+		case "storereg": return STOREREG;
 		}
 		
 		throw new InstructionNotFoundException("There is no instruction named '" + name + "'.");
