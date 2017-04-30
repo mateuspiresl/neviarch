@@ -99,9 +99,9 @@ enclosing the register in parentheses.
 
 ### Build
 
-    javac -d bin src/*.java src/com/neviarch/*.java src/com/neviarch/instruction/*.java src/com/neviarch/util/*.java
+    javac -d bin/ @sources.txt
 
-Or just...
+    python build.py
 
     python build.py
 
