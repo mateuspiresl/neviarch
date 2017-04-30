@@ -6,10 +6,10 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.neviarch.Compiler;
-import com.neviarch.Register;
+import com.neviarch.compiler.Compiler;
 import com.neviarch.instruction.Instruction;
 import com.neviarch.instruction.InstructionData;
+import com.neviarch.register.Register;
 import com.neviarch.util.Bits;
 
 public class InstructionDataTest

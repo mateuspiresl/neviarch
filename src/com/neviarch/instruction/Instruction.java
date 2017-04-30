@@ -69,10 +69,14 @@ public enum Instruction
 	 */
 	LOADREG(InstructionParameters.DUAL_REGISTER),
 	/**
-	 * Store the value of the first register in memory at address
-	 * specified in the second register.
+	 * Store the value of the first register in memory at address specified
+	 * in the second register.
 	 */
-	STOREREG(InstructionParameters.DUAL_REGISTER);
+	STOREREG(InstructionParameters.DUAL_REGISTER),
+	/**
+	 * Set the value of the first register to the value of the second register.
+	 */
+	SETREG(InstructionParameters.DUAL_REGISTER);
 	
 	public final InstructionParameters parameters;
 	
@@ -117,6 +121,7 @@ public enum Instruction
 		case 0xC: return OUT;
 		case 0xD: return LOADREG;
 		case 0xE: return STOREREG;
+		case 0xF: return SETREG;
 		}
 		
 		throw new InstructionNotFoundException("The code '" + Integer.toHexString(code)
@@ -157,6 +162,7 @@ public enum Instruction
 		case "out":		 return OUT;
 		case "loadreg":	 return LOADREG;
 		case "storereg": return STOREREG;
+		case "setreg":	 return SETREG;
 		}
 		
 		throw new InstructionNotFoundException("There is no instruction named '" + name + "'.");

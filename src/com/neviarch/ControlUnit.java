@@ -2,6 +2,8 @@ package com.neviarch;
 
 import com.neviarch.instruction.Instruction;
 import com.neviarch.instruction.InstructionData;
+import com.neviarch.register.Register;
+import com.neviarch.register.Registers;
 
 public class ControlUnit
 {
@@ -32,22 +34,25 @@ public class ControlUnit
 	 * Sets the program and stores in memory.
 	 * @param program the program's bytes.
 	 */
-	public void setProgram(byte[] program)
+	public ControlUnit setProgram(byte[] program)
 	{
 		this.memory.storeProgram(program);
 		this.registers.set(Register.PC, 0);
+		
+		return this;
 	}
 	
 	/**
 	 * Runs the program set.
 	 */
-	public void start()
+	public ControlUnit run()
 	{
 		while (fetchAndDecode())
 		{
 			if (LOG)
 			{
-				System.out.println("Fetching and decoding 0x" + Integer.toHexString(this.registers.get(Register.IR)));
+				System.out.println("Fetching and decoding 0x" + Integer.toHexString(this.registers.get(Register.IR))
+						+ " at line " + (this.registers.get(Register.PC) - 1));
 				System.out.println("Instruction " + this.instruction.getInstruction() + " "
 						+ (this.instruction.getLeftRegister() != null ? this.instruction.getLeftRegister() + " " : "")
 						+ (this.instruction.getRightRegister() != null ? this.instruction.getRightRegister() + " " : "")
@@ -74,6 +79,8 @@ public class ControlUnit
 				System.out.println();
 			}
 		}
+		
+		return this;
 	}
 	
 	/**
@@ -182,6 +189,10 @@ public class ControlUnit
 			this.registers.set(Register.MAR, this.registers.get(right));
 			this.registers.set(Register.MBR, left);
 			this.memory.store();
+			break;
+			
+		case SETREG:
+			this.registers.set(left, this.registers.get(right));
 			break;
 		}
 	}

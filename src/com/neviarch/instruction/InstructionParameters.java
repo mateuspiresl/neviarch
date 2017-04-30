@@ -2,10 +2,25 @@ package com.neviarch.instruction;
 
 public enum InstructionParameters
 {
+	/**
+	 * Supports one register.
+	 */
 	REGISTER(true, false, false),
+	/**
+	 * Supports address.
+	 */
 	ADDRESS(false, false, true),
+	/**
+	 * Supports two registers.
+	 */
 	DUAL_REGISTER(true, true, false),
+	/**
+	 * Supports one register and address.
+	 */
 	REGISTER_ADDRESS(true, false, true),
+	/**
+	 * Supports two registers and address.
+	 */
 	DUAL_REGISTER_ADDRESS(true, true, true);
 	
 	private final boolean leftRegister, rightRegister, address; 
@@ -45,5 +60,13 @@ public enum InstructionParameters
 	 */
 	public boolean hasAddress() {
 		return this.address;
+	}
+	
+	/**
+	 * Returns the number of parameters supported.
+	 * @return the number of parameters.
+	 */
+	public int count() {
+		return (this.leftRegister ? 1 : 0) + (this.rightRegister ? 1 : 0) + (this.address ? 1 : 0);
 	}
 }

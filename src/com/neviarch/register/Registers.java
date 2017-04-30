@@ -1,4 +1,4 @@
-package com.neviarch;
+package com.neviarch.register;
 
 public class Registers
 {

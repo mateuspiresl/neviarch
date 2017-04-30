@@ -1,4 +1,4 @@
-package com.neviarch;
+package com.neviarch.register;
 
 /**
  * Thrown when a register parsing fails.

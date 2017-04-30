@@ -5,9 +5,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.neviarch.ArithmeticLogicUnit;
-import com.neviarch.Register;
-import com.neviarch.Registers;
 import com.neviarch.instruction.Instruction;
+import com.neviarch.register.Register;
+import com.neviarch.register.Registers;
 
 public class ArithmeticLogicUnitTest
 {

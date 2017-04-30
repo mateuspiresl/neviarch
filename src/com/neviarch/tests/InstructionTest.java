@@ -25,6 +25,7 @@ public class InstructionTest
 		testInstruction(Instruction.OUT,		"OUT",		0xC);
 		testInstruction(Instruction.LOADREG,	"LOADREG",	0xD);
 		testInstruction(Instruction.STOREREG,	"STOREREG",	0xE);
+		testInstruction(Instruction.SETREG,		"SETREG",	0xF);
 	}
 	
 	private void testInstruction(Instruction instruction, String name, int code)

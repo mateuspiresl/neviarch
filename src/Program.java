@@ -11,17 +11,19 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 import com.neviarch.CentralProcessingUnit;
-import com.neviarch.Compiler;
 import com.neviarch.ControlUnit;
 import com.neviarch.Memory;
-import com.neviarch.Register;
-import com.neviarch.Registers;
+import com.neviarch.compiler.Compiler;
+import com.neviarch.register.Register;
+import com.neviarch.register.Registers;
 
 public class Program
 {
 	public static final String INPUT_NAME = "C:/Mateus/runtime.nevl";
 	public static final String OUTPUT_NAME = "C:/Mateus/runtime.nev";
 	public static final String ERROR_MESSAGE = "Usage: compile file.nevl [file.nev] OR execute file.nev";
+	
+	private static int logMemSize = 8;
 	
 	public static void main(String[] args)
 	{
@@ -48,16 +50,27 @@ public class Program
 		}
 		else if (args[0].equals("execute"))
 		{
-			if (args.length == 2)
-				execute(args[1]);
+			int index = 2;
 			
-			else if (args.length == 3 && args[2].equals("--log"))
+			while (index <= 4)
 			{
-				ControlUnit.LOG = true;
-				execute(args[1]);
+				if (args.length > index && args[index].equals("--log"))
+				{
+					ControlUnit.LOG = true;
+					index++;
+				}
+				else if (args.length > index + 1 && args[index].equals("--mem"))
+				{
+					logMemSize = Integer.parseInt(args[++index]);
+					index++;
+				}
+				else break;
 			}
 			
-			else System.out.println(ERROR_MESSAGE);
+			if (index != args.length)
+				System.out.println(ERROR_MESSAGE);
+			else
+				execute(args[1]);
 		}
 		else System.out.println(ERROR_MESSAGE);
 	}
@@ -152,7 +165,7 @@ public class Program
 		}
 		catch (Exception e) {
 			System.out.println("Compilation error at instruction " + compiler.getLinesCompiledCount() + ".");
-			System.out.println(e.getMessage());
+			System.out.println("Error description: " + e.getMessage());
 		}
 		
 		return false;
@@ -188,7 +201,7 @@ public class Program
 			System.out.println("]");
 			
 			System.out.print("MEM [ ");
-			for (int i = 0; i < 8; i++) {
+			for (int i = 0; i < logMemSize; i++) {
 				registers.set(Register.MAR, i);
 				memory.fetch();
 				System.out.print(registers.get(Register.MBR) + " ");

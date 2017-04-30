@@ -1,6 +1,9 @@
 ./src/com/neviarch/ArithmeticLogicUnit.java
 ./src/com/neviarch/CentralProcessingUnit.java
-./src/com/neviarch/Compiler.java
+./src/com/neviarch/compiler/Compiler.java
+./src/com/neviarch/compiler/InvalidExpressionException.java
+./src/com/neviarch/compiler/NotDefinedLabelException.java
+./src/com/neviarch/compiler/PreviouslyDefinedLabelException.java
 ./src/com/neviarch/ControlUnit.java
 ./src/com/neviarch/instruction/Instruction.java
 ./src/com/neviarch/instruction/InstructionData.java
@@ -10,10 +13,9 @@
 ./src/com/neviarch/IO.java
 ./src/com/neviarch/Memory.java
 ./src/com/neviarch/NotSupportedActionExpcetion.java
-./src/com/neviarch/Register.java
-./src/com/neviarch/RegisterNotFoundException.java
-./src/com/neviarch/Registers.java
+./src/com/neviarch/register/Register.java
+./src/com/neviarch/register/RegisterNotFoundException.java
+./src/com/neviarch/register/Registers.java
 ./src/com/neviarch/util/Bits.java
 ./src/com/neviarch/util/InvalidAddressRepresentationException.java
 ./src/Program.java
-./src/Test.java

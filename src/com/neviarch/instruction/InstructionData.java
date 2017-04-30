@@ -1,6 +1,6 @@
 package com.neviarch.instruction;
 
-import com.neviarch.Register;
+import com.neviarch.register.Register;
 import com.neviarch.util.Bits;
 
 public class InstructionData

@@ -1,5 +1,7 @@
 package com.neviarch;
 
+import com.neviarch.register.Register;
+import com.neviarch.register.Registers;
 import com.neviarch.util.Bits;
 
 public class Memory

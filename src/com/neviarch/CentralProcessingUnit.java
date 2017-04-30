@@ -1,5 +1,7 @@
 package com.neviarch;
 
+import com.neviarch.register.Registers;
+
 public class CentralProcessingUnit
 {
 	private final Registers registers;
@@ -44,7 +46,7 @@ public class CentralProcessingUnit
 	public CentralProcessingUnit run(byte[] program)
 	{
 		this.controlUnit.setProgram(program);
-		this.controlUnit.start();
+		this.controlUnit.run();
 		
 		return this;
 	}
