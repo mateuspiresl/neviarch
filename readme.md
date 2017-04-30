@@ -99,6 +99,8 @@ enclosing the register in parentheses.
 
 ### Build
 
+One of the above.
+
     javac -d bin/ @sources.txt
 
     python build.py
