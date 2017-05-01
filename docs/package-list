@@ -1,3 +1,6 @@
+
 com.neviarch
+com.neviarch.compiler
 com.neviarch.instruction
+com.neviarch.register
 com.neviarch.util
