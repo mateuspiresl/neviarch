@@ -1,0 +1,14 @@
+in ax
+set bx 0x1
+set cx 0x1
+set dx 0x1
+jumpgreq bx ax end
+
+loop:
+add cx dx
+mult bx cx
+jumpgr ax cx loop
+
+end:
+store bx 0x0
+out bx

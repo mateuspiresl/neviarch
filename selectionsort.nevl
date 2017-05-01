@@ -1,0 +1,47 @@
+set AX 0x0 # memory end
+set BX 0x1 # one for increment
+set CX 0x0 # the minimum value allowed
+
+input:
+in DX
+jumpgr CX DX outer_init # leaves if the value is negative
+store DX (AX)
+add AX BX # increment
+jump input
+
+outer_init:
+set GX 0x0 # outer index
+
+outer:
+set CX (GX) # minimum index
+load HX (GX) # minimum value
+
+# start inner index with outer index + 1
+set DX (GX) 
+add DX BX
+
+inner:
+load EX (DX) # inner value
+# if the inner isn't less than the minimum
+jumpgreq EX HX inner_cond
+# otherwise, inner is the new minimum
+set CX (DX) # update minimum index
+set HX (EX) # update minimum value
+
+inner_cond:
+add DX BX # increment inner index
+jumpgr AX DX inner # continue if satisfies inner condition
+
+# if the minimum index is equal to the outer index
+jumpeq GX CX outer_cond # jump to the outer condition
+
+# otherwise, swap
+load FX (GX)
+store HX (GX)
+store FX (CX)
+
+outer_cond:
+add GX BX # increment outer index
+set FX (GX)
+add FX BX
+jumpgr AX FX outer # continue if satisfies outer condition
