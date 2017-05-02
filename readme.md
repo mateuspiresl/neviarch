@@ -81,10 +81,10 @@ The supported instruction are:
 
 Updates the value at _0x1_ to its sum with _0x5F_.
 
-READ ax 0x1
-SET bx 0x5F
-ADD ax bx
-STORE ax 0x1
+    READ ax 0x1
+    SET bx 0x5F
+    ADD ax bx
+    STORE ax 0x1
 
 #### Dereference
 
@@ -109,5 +109,58 @@ One of the above.
 
 ### Run
 
+To write, compile and execute, use the line below.
+This will output the execution and write two files, runtime.nevl with the code
+and runtime.nev with the compiled bytes.
+
     java -cp bin Program
 
+#### Compile
+
+To compile a file, for example, named _main.nevl_, type:
+
+    java -cp bin Program compile main.nevl
+
+This will generate a _main.nev_ file with the compiled program.
+To specify the name of the output file, just write it's name in the end,
+like below, if you want it to be _program.nev_.
+
+    java -cp bin Program compile main.nevl program.nev
+
+#### Execute
+
+To execute the program, for example, named _program.nev_, use:
+
+    java -cp bin Program execute program.nev
+
+#### Options
+
+##### --log
+
+To see the log of the control unit, write _--log_, at the end.
+
+    java -cp bin Program execute program.nev --log
+    
+##### --mem x
+
+To change the size of the memory that will be output, write _--mem_, at the end,
+followed by the size.
+
+    java -cp bin Program execute program.nev --mem 20
+
+Can be used together with the _--log_ options in any order.
+
+### Code examples
+
+#### Factorial
+
+The program can be found [here](factorial.nevl).
+
+It needs an integer as input. The ouput is the factorial of this value.
+
+#### Selection Sort of positive numbers
+
+The program can be found [here](selectionsort.nevl).
+
+It needs a list of positive integers followed by a negative integer as input.
+The program will sort the positive numbers.
