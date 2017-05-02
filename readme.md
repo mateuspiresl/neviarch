@@ -75,6 +75,7 @@ The supported instruction are:
 
 - In the order: instuction, first register (if used), second register (if used) and the address (if used).
 - It's case insensitive.
+- One instruction per line.
 - The address or value at the address space must start with _0x_.
 
 #### Example
@@ -91,11 +92,29 @@ Updates the value at _0x1_ to its sum with _0x5F_.
 Instructions that needs value or address can use values from registers, instead of an hexadecimal,
 enclosing the register in parentheses.
 
-##### Example
-
     SET AX 0x1 # Set the value of AX to 1
     SET BX (AX) # Set the value of BX to the value of AX, in this case, 1
     JUMP (AX) # Jump to the memory address specified in the register AX, in this case, to address 0x1
+
+#### Labels
+
+The jump instructions, JUMP, JUMPEQ, JUMPGR and JUMPGREQ, accepts labels instead of instruction address.
+To define a label white the name, only letters and underscore, followed by ":".
+To use a label, just write the name in the address place.
+The label definition must be alone in the line.
+
+    JUMPEQ ax bx End
+    End:
+    ...
+
+#### Comments
+
+The comments must start with "#" and can be alone of after instructions or labels.
+
+    # This is a comment
+    #This is acceptable
+    JUMPEQ ax bx End # This is also acceptable
+    End: # And this too
 
 ### Build
 
